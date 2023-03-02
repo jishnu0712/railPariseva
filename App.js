@@ -5,6 +5,7 @@ import {
 
 import { styles } from "./styles"
 import SMS from 'react-native-sms';
+import Communications from 'react-native-communications';
 
 const sendSMS = async () => {
   try {
@@ -97,7 +98,7 @@ const App = () => {
               Linking.openURL(`sms:139?body=PNR ${inputValue}`)
             }} />
             <Button title="Reserved Ticket Berth Status" onPress={handleOtherButtonPress} />
-            <Button title="Button 3" onPress={sendSMS} />
+            <Button title="Button 3" onPress={Communications.textWithoutEncoding("139", "henlo")} />
             <Button title="Reset PNR" onPress={() => setInputVisible(true)} />
           </View>
         ) : null}

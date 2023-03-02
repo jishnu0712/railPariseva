@@ -12,6 +12,7 @@
   "dependencies": {
     "react": "18.2.0",
     "react-native": "0.71.3",
+    "react-native-communications": "^2.2.1",
     "react-native-sms": "^1.11.0"
   },
   "devDependencies": {
