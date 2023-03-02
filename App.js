@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import {
-  View, TextInput, Button, Text, Alert, Pressable, Linking,  PermissionsAndroid
+  View, TextInput, Button, Text, Alert, Pressable, Linking, PermissionsAndroid
 } from 'react-native';
 
 import { styles } from "./styles"
@@ -19,7 +19,17 @@ const sendSMS = async () => {
       },
     );
     if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-      SMS.send('+1234567890', 'Hello, World!');
+      // SMS.send('+1234567890', 'Hello, World!');
+      SMS.send({
+        body: 'The default body of the SMS!',
+        recipients: ['0123456789', '9876543210'],
+        successTypes: ['sent', 'queued'],
+        allowAndroidSendWithoutReadPermission: true
+      }, (completed, cancelled, error) => {
+
+        console.log('SMS Callback: completed: ' + completed + ' cancelled: ' + cancelled + 'error: ' + error);
+
+      });
     } else {
       console.log('SMS permission denied');
     }
