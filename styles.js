@@ -3,7 +3,7 @@ import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
     container: {
-        flex: 1, justifyContent: 'center', alignItems: 'stretch' 
+        flex: 1, justifyContent: 'center', alignItems: 'stretch'
     },
     item: {
         backgroundColor: '#f9c2ff',
@@ -19,7 +19,10 @@ export const styles = StyleSheet.create({
         fontSize: 32,
     },
     PNRInput: {
-        height: 40, borderColor: 'gray', borderWidth: 1, marginRight: 10, flex: 3
+        height: 40, borderColor: 'gray', borderWidth: 1,
+        marginRight: 10, flex: 3,
+        padding: 4
+
     },
     submitButton: {
         alignItems: 'center',
@@ -30,6 +33,16 @@ export const styles = StyleSheet.create({
         elevation: 3,
         backgroundColor: 'black',
         flex: 1
+    },
+    actionButton: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: "#333",
+        paddingVertical: 10,
+        paddingHorizontal: 10,
+        marginVertical: 4,
+        borderRadius: 5,
+
     },
     buttonText: {
         fontSize: 16,

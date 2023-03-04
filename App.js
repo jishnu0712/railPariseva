@@ -4,10 +4,15 @@ import {
 } from 'react-native';
 
 import { styles } from "./styles"
-import SMS from 'react-native-sms';
-import Communications from 'react-native-communications';
+import { NativeModules } from 'react-native';
 
-const sendSMS = async () => {
+const sendSMSNow = async (number, msg) => {
+  let DirectSms = NativeModules.DirectSms;
+  console.log('DirectSms', DirectSms)
+  DirectSms.sendDirectSms(number, msg)
+};
+
+const sendSMS = async (number, msg) => {
   try {
     const granted = await PermissionsAndroid.request(
       PermissionsAndroid.PERMISSIONS.SEND_SMS,
@@ -20,17 +25,7 @@ const sendSMS = async () => {
       },
     );
     if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-      // SMS.send('+1234567890', 'Hello, World!');
-      SMS.send({
-        body: 'The default body of the SMS!',
-        recipients: ['0123456789', '9876543210'],
-        successTypes: ['sent', 'queued'],
-        allowAndroidSendWithoutReadPermission: true
-      }, (completed, cancelled, error) => {
-
-        console.log('SMS Callback: completed: ' + completed + ' cancelled: ' + cancelled + 'error: ' + error);
-
-      });
+      sendSMSNow(number, msg);
     } else {
       console.log('SMS permission denied');
     }
@@ -41,7 +36,7 @@ const sendSMS = async () => {
 
 
 const App = () => {
-  const [inputValue, setInputValue] = useState('');
+  const [PNR, setPNR] = useState('');
   const [inputVisible, setInputVisible] = useState(true);
 
   const handleSubmit = () => {
@@ -80,13 +75,13 @@ const App = () => {
   return (
     <View style={styles.container}>
       <View style={{ margin: 8 }}>
-        <Text style={styles.PNRHeader}>{inputVisible ? 'Enter PNR' : "PNR: " + inputValue}</Text>
+        <Text style={styles.PNRHeader}>{inputVisible ? 'Enter PNR' : "PNR: " + PNR}</Text>
         {inputVisible ? (
           <View style={{ flexDirection: 'row', alignItems: 'center', }}>
             <TextInput
               style={styles.PNRInput}
-              onChangeText={setInputValue}
-              value={inputValue}
+              onChangeText={setPNR}
+              value={PNR}
               keyboardType="numeric"
             />
             <Pressable style={styles.submitButton} onPress={handleSubmit}><Text style={styles.buttonText}>Submit</Text></Pressable>
@@ -94,12 +89,14 @@ const App = () => {
         ) : null}
         {!inputVisible ? (
           <View >
-            <Button title="Ticket Status" onPress={() => {
-              Linking.openURL(`sms:139?body=PNR ${inputValue}`)
-            }} />
-            <Button title="Reserved Ticket Berth Status" onPress={handleOtherButtonPress} />
-            <Button title="Button 3" onPress={Communications.textWithoutEncoding("139", "henlo")} />
-            <Button title="Reset PNR" onPress={() => setInputVisible(true)} />
+            <Pressable style={styles.actionButton} onPress={() => sendSMS("139", `IRPNR ${PNR}`)} >
+              <Text style={styles.buttonText}>Berth Status Enquiry</Text></Pressable>
+            <Pressable style={styles.actionButton} onPress={() => sendSMS("139", `CLEAN ${PNR}`)} >
+              <Text style={styles.buttonText}>Clean My Coach</Text></Pressable>
+            <Pressable style={styles.actionButton} onPress={() => sendSMS("139", `PNR ${PNR}`)} >
+              <Text style={styles.buttonText}>Pressable 3</Text></Pressable>
+            <Pressable style={styles.actionButton} onPress={() => setInputVisible(true)} >
+              <Text style={styles.buttonText}>Reset PNR</Text></Pressable>
           </View>
         ) : null}
       </View>
